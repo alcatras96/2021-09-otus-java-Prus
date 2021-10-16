@@ -5,7 +5,7 @@ import java.util.Deque;
 
 public class CustomerReverseOrder {
 
-    Deque<Customer> customerDeque = new ArrayDeque<>();
+    private final Deque<Customer> customerDeque = new ArrayDeque<>();
 
     public void add(Customer customer) {
         customerDeque.push(customer);
