@@ -45,7 +45,7 @@ public final class TestsLauncher {
         }
     }
 
-    private static TestResult runTest(Object testInstance, Method testMethod,
+    private TestResult runTest(Object testInstance, Method testMethod,
                                       List<Method> beforeMethods, List<Method> afterMethods) {
         TestResult testResult = new TestResult(testMethod.getDeclaringClass().getSimpleName(), testMethod.getName());
         beforeMethods.forEach(beforeMethod -> ReflectionHelper.callMethod(testInstance, beforeMethod));

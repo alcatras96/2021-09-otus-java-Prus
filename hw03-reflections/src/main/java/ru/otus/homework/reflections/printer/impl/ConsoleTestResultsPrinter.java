@@ -20,7 +20,7 @@ public class ConsoleTestResultsPrinter implements TestResultsPrinter {
                 + "=============================================");
     }
 
-    private static String getTestResultsAsString(List<TestResult> testResults) {
+    private String getTestResultsAsString(List<TestResult> testResults) {
         return testResults.stream()
                 .map(TestResult::toString)
                 .collect(Collectors.joining("\n"));
