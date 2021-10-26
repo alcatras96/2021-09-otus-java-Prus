@@ -6,7 +6,6 @@ import ru.otus.homework.reflections.annotation.Test;
 import ru.otus.homework.reflections.exception.AnnotationNotFoundException;
 import ru.otus.homework.reflections.helper.ReflectionHelper;
 import ru.otus.homework.reflections.model.TestResult;
-import ru.otus.homework.reflections.printer.api.TestResultsPrinter;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,13 +16,7 @@ import static ru.otus.homework.reflections.helper.ReflectionHelper.getMethodsByA
 
 public final class TestsLauncher {
 
-    private final TestResultsPrinter resultsPrinter;
-
-    public TestsLauncher(TestResultsPrinter resultsPrinter) {
-        this.resultsPrinter = resultsPrinter;
-    }
-
-    public void launch(String testClassName) throws ClassNotFoundException {
+    public List<TestResult> launch(String testClassName) throws ClassNotFoundException {
         Class<?> testClass = Class.forName(testClassName);
         List<Method> testClassMethods = Arrays.asList(testClass.getDeclaredMethods());
         List<Method> testMethods = getMethodsByAnnotation(testClassMethods, Test.class);
@@ -38,19 +31,21 @@ public final class TestsLauncher {
                 testResults.add(testResult);
             }
 
-            resultsPrinter.print(testResults);
+            return testResults;
         } else {
             throw new AnnotationNotFoundException(String.format("Not found %s annotation on methods in %s test class.",
                     Test.class.getSimpleName(), testClass.getSimpleName()));
         }
+
     }
 
     private TestResult runTest(Object testInstance, Method testMethod,
-                                      List<Method> beforeMethods, List<Method> afterMethods) {
+                               List<Method> beforeMethods, List<Method> afterMethods) {
         TestResult testResult = new TestResult(testMethod.getDeclaringClass().getSimpleName(), testMethod.getName());
         beforeMethods.forEach(beforeMethod -> ReflectionHelper.callMethod(testInstance, beforeMethod));
         try {
             ReflectionHelper.callMethod(testInstance, testMethod);
+            testResult.setSuccessful(true);
         } catch (RuntimeException exception) {
             testResult.setSuccessful(false);
             testResult.setCause(exception.getCause());

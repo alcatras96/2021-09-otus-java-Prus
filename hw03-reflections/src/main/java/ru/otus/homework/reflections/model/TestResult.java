@@ -4,7 +4,7 @@ public class TestResult {
 
     private String className;
     private String methodName;
-    private boolean successful = true;
+    private boolean successful;
     private Throwable cause;
 
     public TestResult(String className, String methodName) {
