@@ -26,17 +26,17 @@ public final class Ioc {
 
     private static class LogInvocationHandler implements InvocationHandler {
         private final TestLogging testLogging;
-        private final Set<String> logMethodNamesWithParams;
+        private final Set<String> logMethodNamesWithParamTypes;
 
         LogInvocationHandler(TestLogging testLogging) {
             this.testLogging = testLogging;
-            logMethodNamesWithParams = ReflectionUtils.getLogMethodNamesWithParams(testLogging);
+            logMethodNamesWithParamTypes = ReflectionUtils.getLogMethodNamesWithParamTypes(testLogging);
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args)
                 throws InvocationTargetException, IllegalAccessException {
-            if (logMethodNamesWithParams.contains(ReflectionUtils.getMethodNameWithParams(method))) {
+            if (logMethodNamesWithParamTypes.contains(ReflectionUtils.getMethodNameWithParamTypes(method))) {
                 logMethodNameAndParams(method, args);
             }
             return method.invoke(testLogging, args);

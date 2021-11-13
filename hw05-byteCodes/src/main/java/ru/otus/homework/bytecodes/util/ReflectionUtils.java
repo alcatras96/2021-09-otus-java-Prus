@@ -15,17 +15,17 @@ public final class ReflectionUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static Set<String> getLogMethodNamesWithParams(TestLogging testLogging) {
+    public static Set<String> getLogMethodNamesWithParamTypes(TestLogging testLogging) {
         return Arrays.stream(testLogging.getClass().getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(Log.class))
-                .map(ReflectionUtils::getMethodNameWithParams)
+                .map(ReflectionUtils::getMethodNameWithParamTypes)
                 .collect(Collectors.toSet());
     }
 
-    public static String getMethodNameWithParams(Method method) {
-        StringJoiner joiner = new StringJoiner(",", method.getName() + "{", "}");
+    public static String getMethodNameWithParamTypes(Method method) {
+        StringJoiner joiner = new StringJoiner(",", method.getName() + "(", ")");
         Arrays.stream(method.getParameterTypes())
-                .forEach(methodTypeVariable -> joiner.add(methodTypeVariable.getTypeName()));
+                .forEach(paramType -> joiner.add(paramType.getTypeName()));
 
         return joiner.toString();
     }
