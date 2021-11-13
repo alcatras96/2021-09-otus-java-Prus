@@ -9,6 +9,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,8 +20,8 @@ public final class Ioc {
         throw new UnsupportedOperationException();
     }
 
-    public static TestLogging createTestLoggingInstance() {
-        InvocationHandler handler = new LogInvocationHandler(new TestLoggingImpl());
+    public static TestLogging createTestLoggingInstance(TestLogging instanceToWrap) {
+        InvocationHandler handler = new LogInvocationHandler(instanceToWrap);
         return (TestLogging) Proxy.newProxyInstance(Ioc.class.getClassLoader(),
                 new Class<?>[]{TestLogging.class}, handler);
     }
@@ -43,10 +45,17 @@ public final class Ioc {
         }
 
         private void logMethodNameAndParams(Method method, Object[] args) {
-            String params = Arrays.stream(args)
+            String params = Optional.ofNullable(args)
+                    .map(Arrays::asList)
+                    .orElse(Collections.emptyList())
+                    .stream()
                     .map(Object::toString)
                     .collect(Collectors.joining(", "));
-            System.out.printf("executed method: %s with params: %s%n", method.getName(), params);
+            if(params.length() == 0){
+                System.out.printf("executed method: %s without params%n", method.getName());
+            } else {
+                System.out.printf("executed method: %s with params: %s%n", method.getName(), params);
+            }
         }
     }
 }

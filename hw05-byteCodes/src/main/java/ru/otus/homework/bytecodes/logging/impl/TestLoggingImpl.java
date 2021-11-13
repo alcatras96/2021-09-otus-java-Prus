@@ -5,6 +5,10 @@ import ru.otus.homework.bytecodes.logging.api.TestLogging;
 
 public class TestLoggingImpl implements TestLogging {
 
+    @Log
+    @Override
+    public void calculation() {
+    }
 
     @Log
     @Override

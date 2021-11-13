@@ -2,6 +2,8 @@ package ru.otus.homework.bytecodes.logging.api;
 
 public interface TestLogging {
 
+    void calculation();
+
     void calculation(int param1);
 
     void calculation(int param1, int param2);
