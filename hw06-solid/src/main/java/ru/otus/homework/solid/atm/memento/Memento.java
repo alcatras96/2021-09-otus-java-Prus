@@ -1,16 +1,19 @@
 package ru.otus.homework.solid.atm.memento;
 
-import ru.otus.homework.solid.atm.vault.api.MoneyVault;
+import ru.otus.homework.solid.denomination.Denomination;
+
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Memento {
 
-    private final MoneyVault backup;
+    private final SortedMap<Denomination, Integer> backup;
 
-    public Memento(MoneyVault vault) {
-        this.backup = vault.backup();
+    public Memento(SortedMap<Denomination, Integer> cells) {
+        this.backup = new TreeMap<>(cells);
     }
 
-    public MoneyVault restore() {
+    public SortedMap<Denomination, Integer> restore() {
         return backup;
     }
 }

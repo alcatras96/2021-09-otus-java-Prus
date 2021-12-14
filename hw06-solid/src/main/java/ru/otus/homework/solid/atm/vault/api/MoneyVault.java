@@ -11,6 +11,4 @@ public interface MoneyVault {
     List<Banknote> get(int amount);
 
     int getTotalAmount();
-
-    MoneyVault backup();
 }
