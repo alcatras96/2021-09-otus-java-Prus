@@ -2,7 +2,7 @@ package ru.otus.model;
 
 import static java.util.Optional.ofNullable;
 
-public class Message {
+public class Message implements Cloneable {
     private final long id;
     private final String field1;
     private final String field2;
@@ -94,6 +94,11 @@ public class Message {
 
     public ObjectForMessage getField13() {
         return field13;
+    }
+
+    @Override
+    public Message clone() {
+        return toBuilder().build();
     }
 
     @Override
