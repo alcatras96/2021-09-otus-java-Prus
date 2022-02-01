@@ -12,6 +12,8 @@ import ru.otus.crm.model.Client;
 import ru.otus.crm.model.Phone;
 import ru.otus.crm.service.DbServiceClientImpl;
 
+import java.util.List;
+
 public class DbServiceDemo {
 
     private static final Logger log = LoggerFactory.getLogger(DbServiceDemo.class);
@@ -34,9 +36,12 @@ public class DbServiceDemo {
         var clientTemplate = new DataTemplateHibernate<>(Client.class);
 ///
         var dbServiceClient = new DbServiceClientImpl(transactionManager, clientTemplate);
-        dbServiceClient.saveClient(new Client("dbServiceFirst"));
+        dbServiceClient.saveClient(new Client(null, "dbServiceFirst", new Address(null, "AnyStreet1"),
+                List.of(new Phone(null, "13-555-221"), new Phone(null, "14-666-3331"))));
 
-        var clientSecond = dbServiceClient.saveClient(new Client("dbServiceSecond"));
+        var clientSecond = dbServiceClient.saveClient(new Client(null, "dbServiceSecond",
+                new Address(null, "AnyStreet2"),
+                List.of(new Phone(null, "13-555-222"), new Phone(null, "14-666-3332"))));
         var clientSecondSelected = dbServiceClient.getClient(clientSecond.getId())
                 .orElseThrow(() -> new RuntimeException("Client not found, id:" + clientSecond.getId()));
         log.info("clientSecondSelected:{}", clientSecondSelected);
