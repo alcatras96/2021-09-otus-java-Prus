@@ -14,10 +14,6 @@ public class Address implements Cloneable {
     @Column(name = "street")
     private String street;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
-
     public Address() {
     }
 
@@ -26,14 +22,8 @@ public class Address implements Cloneable {
         this.street = street;
     }
 
-    public Address(Long id, String street, Client client) {
-        this.id = id;
-        this.street = street;
-        this.client = client;
-    }
-
     @Override
     public Address clone() {
-        return new Address(id, street, client);
+        return new Address(id, street);
     }
 }
