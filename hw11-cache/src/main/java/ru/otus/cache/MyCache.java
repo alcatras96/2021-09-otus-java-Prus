@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.stream.Collectors;
 
 public class MyCache<K, V> implements HwCache<K, V> {
 
-    Map<K, V> cache = new WeakHashMap<>();
-    List<WeakReference<HwListener<K, V>>> listeners = new ArrayList<>();
+    private final Map<K, V> cache = new WeakHashMap<>();
+    private final List<WeakReference<HwListener<K, V>>> listeners = new ArrayList<>();
 
     @Override
     public void put(K key, V value) {
@@ -64,8 +63,6 @@ public class MyCache<K, V> implements HwCache<K, V> {
             }
         });
 
-        listeners = listeners.stream()
-                .filter(hwListenerWeakReference -> hwListenerWeakReference.get() != null)
-                .collect(Collectors.toList());
+        listeners.removeIf(hwListenerWeakReference -> hwListenerWeakReference.get() == null);
     }
 }
