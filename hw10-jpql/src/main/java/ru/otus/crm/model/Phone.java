@@ -14,6 +14,14 @@ public class Phone implements Cloneable {
     @Column(name = "number")
     private String number;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     public Phone(Long id, String number) {
         this.id = id;
         this.number = number;

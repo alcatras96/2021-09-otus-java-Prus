@@ -3,4 +3,5 @@ public interface Versions {
     String glassfishJson = "1.1.4";
     String reflections = "0.10.2";
     String testcontainers = "1.15.3";
+    String awaitility = "3.0.0";
 }
