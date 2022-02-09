@@ -7,10 +7,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -30,7 +27,7 @@ public class Client implements Cloneable {
     private Address address;
 
     @MappedCollection(idColumn = "client_id")
-    private Set<Phone> phones = new HashSet<>();
+    private Set<Phone> phones = new LinkedHashSet<>();
 
     @Override
     public Client clone() {
