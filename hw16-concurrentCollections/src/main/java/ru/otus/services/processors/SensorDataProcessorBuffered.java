@@ -16,7 +16,7 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
 
     private final int bufferSize;
     private final SensorDataBufferedWriter writer;
-    private List<SensorData> bufferedData = Collections.synchronizedList(new ArrayList<>());
+    private List<SensorData> bufferedData = createSynchronizedList();
 
     public SensorDataProcessorBuffered(int bufferSize, SensorDataBufferedWriter writer) {
         this.bufferSize = bufferSize;
@@ -41,11 +41,15 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
             if (!bufferedData.isEmpty()) {
                 bufferedData.sort(Comparator.comparing(SensorData::getMeasurementTime));
                 writer.writeBufferedData(bufferedData);
-                bufferedData = new ArrayList<>();
+                bufferedData = createSynchronizedList();
             }
         } catch (Exception e) {
             log.error("Ошибка в процессе записи буфера", e);
         }
+    }
+
+    private List<SensorData> createSynchronizedList() {
+        return Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
