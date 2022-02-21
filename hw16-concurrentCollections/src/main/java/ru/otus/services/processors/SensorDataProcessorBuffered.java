@@ -7,7 +7,6 @@ import ru.otus.api.model.SensorData;
 import ru.otus.lib.SensorDataBufferedWriter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
 
     private final int bufferSize;
     private final SensorDataBufferedWriter writer;
-    private List<SensorData> bufferedData = createSynchronizedList();
+    private List<SensorData> bufferedData = new ArrayList<>();
 
     public SensorDataProcessorBuffered(int bufferSize, SensorDataBufferedWriter writer) {
         this.bufferSize = bufferSize;
@@ -24,16 +23,12 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
     }
 
     @Override
-    public void process(SensorData data) {
-        if (bufferedData.size() >= bufferSize) {
-            synchronized (this) {
-                if (bufferedData.size() >= bufferSize) {
-                    flush();
-                }
-            }
-        }
-
+    public synchronized void process(SensorData data) {
         bufferedData.add(data);
+
+        if (bufferedData.size() >= bufferSize) {
+            flush();
+        }
     }
 
     public synchronized void flush() {
@@ -41,15 +36,11 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
             if (!bufferedData.isEmpty()) {
                 bufferedData.sort(Comparator.comparing(SensorData::getMeasurementTime));
                 writer.writeBufferedData(bufferedData);
-                bufferedData = createSynchronizedList();
+                bufferedData = new ArrayList<>();
             }
         } catch (Exception e) {
             log.error("Ошибка в процессе записи буфера", e);
         }
-    }
-
-    private List<SensorData> createSynchronizedList() {
-        return Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
