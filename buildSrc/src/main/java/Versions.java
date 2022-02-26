@@ -8,4 +8,9 @@ public interface Versions {
     String gson = "2.8.9";
     String jetty = "11.0.7";
     String jsr305 = "3.0.2";
+    String grpc = "1.44.1";
+    String errorProneAnnotations = "2.11.0";
+    String tomcatAnnotationsApi = "6.0.53";
+    String protobuf = "3.19.1";
+
 }
